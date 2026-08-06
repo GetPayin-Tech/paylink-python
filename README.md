@@ -1,5 +1,6 @@
 # paylink
 
+[![CI](https://github.com/GetPayin-Tech/paylink-python/actions/workflows/ci.yml/badge.svg)](https://github.com/GetPayin-Tech/paylink-python/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/v/paylink.svg)](https://pypi.org/project/paylink/)
 [![Python](https://img.shields.io/pypi/pyversions/paylink.svg)](https://pypi.org/project/paylink/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
