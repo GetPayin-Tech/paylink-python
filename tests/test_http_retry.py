@@ -126,5 +126,34 @@ def _err_obj(status: int) -> PaylinkApiError:
     raise AssertionError("expected PaylinkApiError")
 
 
+def _sent_body(transport: FakeTransport) -> dict:
+    """Decode the JSON body the transport received on its most recent call."""
+    return json.loads(transport.calls[-1]["body"].decode("utf-8"))
+
+
+class IframeFieldTest(unittest.TestCase):
+    def test_iframe_true_is_sent_as_string_one_and_unsigned(self) -> None:
+        """iframe=True lands in the body as '1' but does not change the signature."""
+        without = FakeTransport(CHECKOUT_OK)
+        _invoice(_client(without))
+        base_body = _sent_body(without)
+        self.assertNotIn("iframe", base_body)
+
+        with_iframe = FakeTransport(CHECKOUT_OK)
+        _invoice(_client(with_iframe), iframe=True)
+        iframe_body = _sent_body(with_iframe)
+
+        # iframe is present on the wire, coerced to "1".
+        self.assertEqual(iframe_body["iframe"], "1")
+
+        # It is UNSIGNED: the signature is identical with and without it.
+        self.assertEqual(iframe_body["signature"], base_body["signature"])
+
+    def test_iframe_omitted_when_none(self) -> None:
+        transport = FakeTransport(CHECKOUT_OK)
+        _invoice(_client(transport))  # no iframe kwarg
+        self.assertNotIn("iframe", _sent_body(transport))
+
+
 if __name__ == "__main__":
     unittest.main()

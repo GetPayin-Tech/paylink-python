@@ -11,8 +11,8 @@ Rules encoded here, mirroring the server:
 
 * Absent optional fields (``None`` at call time) are skipped entirely,
   contributing nothing to the body or the signature.
-* ``signed=False`` fields (``payment_mode``) are sent in the body but excluded
-  from the signature.
+* ``signed=False`` fields (``payment_mode``, ``iframe``) are sent in the body but
+  excluded from the signature.
 * ``country_state_block`` appends the per-country state fields after the listed
   fields: US -> ``us_state``, ``postal_code``; CA -> ``canada_state``,
   ``postal_code``.
@@ -83,6 +83,7 @@ INVOICE_CREATE = EndpointSpec(
             "order_details",
         ),
         FieldSpec("payment_mode", signed=False),
+        FieldSpec("iframe", signed=False),
     ),
 )
 

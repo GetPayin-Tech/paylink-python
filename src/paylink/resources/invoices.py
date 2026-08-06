@@ -31,6 +31,7 @@ class Invoices(Resource):
         webhook_url: Optional[str] = None,
         order_details: Optional[str] = None,
         payment_mode: Optional[str] = None,
+        iframe: Optional[bool] = None,
         idempotency_key: Optional[str] = None,
     ) -> CreateInvoiceResult:
         """Create an invoice and return a temporary signed checkout URL.
@@ -38,7 +39,9 @@ class Invoices(Resource):
         ``POST /api/v2/integration/init``. Redirect the payer to ``checkout_url``.
         ``redirection_url``/``webhook_url`` must be HTTPS URLs on the
         integration's registered domain; ``payment_mode`` (``capture`` or
-        ``authorize``) is sent but excluded from the signature.
+        ``authorize``) is sent but excluded from the signature. ``iframe``
+        (``True`` to enable embedded/iframe checkout) is likewise sent but
+        excluded from the signature.
         """
         data = self._post(
             INVOICE_CREATE,
@@ -57,6 +60,7 @@ class Invoices(Resource):
                 "webhook_url": webhook_url,
                 "order_details": order_details,
                 "payment_mode": payment_mode,
+                "iframe": iframe,
             },
             idempotency_key=idempotency_key,
         )

@@ -59,6 +59,21 @@ checkout = paylink.invoices.create(
 print(checkout.checkout_url, checkout.invoice_id, checkout.expires_at)
 ```
 
+For an embedded checkout you can render inside your own page, pass `iframe=True`
+(sent in the request body but excluded from the signature, like `payment_mode`):
+
+```python
+checkout = paylink.invoices.create(
+    first_name="John",
+    last_name="Doe",
+    email="john@example.com",
+    order_title="Gold Plan",
+    order_amount="250.00",
+    currency="USD",
+    iframe=True,  # enable embedded/iframe checkout
+)
+```
+
 Both credentials are issued in the PayLink dashboard under **Settings → Payment
 Integrations**. `public_token` is sent on every request; `hash_token` is the
 secret used only to sign — it never leaves your server.
